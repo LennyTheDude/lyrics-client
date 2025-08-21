@@ -1,0 +1,37 @@
+@use '../styles/main.scss' as *;
+
+.home {
+  @extend .container;
+}
+
+.home-header {
+  @extend .flex, .justify-between, .items-center, .mb-4;
+}
+
+.translations-list {
+  @extend .flex, .flex-col, .gap-3;
+}
+
+.translation-item {
+  @extend .flex, .justify-between, .items-center, .p-3;
+}
+
+.translation-info {
+  @extend .flex, .flex-col, .gap-1;
+}
+
+.translation-link {
+  font-size: 1.125rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.translation-languages {
+  font-size: 0.875rem;
+}
+
+.loading,
+.error {
+  @extend .text-center, .p-4;
+  font-size: 1.125rem;
+}

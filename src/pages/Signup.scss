@@ -1,0 +1,39 @@
+@use '../styles/main.scss' as *;
+
+.auth-container {
+  @extend .flex, .items-center, .justify-center;
+  min-height: calc(100vh - 70px);
+  @extend .p-4;
+}
+
+.auth-card {
+  max-width: 500px;
+  width: 100%;
+  @extend .p-4;
+}
+
+.auth-header {
+  @extend .text-center, .mb-4;
+  
+  h1 {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  p {
+    font-size: 1rem;
+  }
+}
+
+.auth-form {
+  @extend .p-4;
+}
+
+.auth-footer {
+  @extend .text-center, .mt-4;
+  
+  a {
+    text-decoration: none;
+    font-weight: 500;
+  }
+}

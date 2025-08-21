@@ -1,0 +1,82 @@
+@use '../styles/main.scss' as *;
+
+.edit-translation {
+  @extend .container;
+}
+
+.edit-header {
+  @extend .flex, .justify-between, .items-center, .mb-4, .pb-3;
+}
+
+.translation-title {
+  h1 {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  p {
+    margin-bottom: 0.25rem;
+  }
+}
+
+.translation-languages {
+  font-weight: 500;
+}
+
+.edit-actions {
+  @extend .flex, .gap-2;
+}
+
+.translation-content {
+  @extend .grid, .grid-cols-2, .gap-4, .mb-4;
+}
+
+.lyrics-section {
+  @extend .p-3;
+  
+  h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+  }
+}
+
+.lyrics-text.original {
+  line-height: 1.8;
+  white-space: pre-line;
+  padding: 1rem;
+  
+  p {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.lyrics-editable {
+  width: 100%;
+  min-height: 400px;
+  padding: 1rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.lyrics-line {
+  min-height: 1.6em;
+  padding: 0.125rem 0;
+  
+  &:focus {
+    outline: none;
+    padding: 0.0625rem 0.25rem;
+    margin: 0.0625rem -0.25rem;
+  }
+}
+
+.error-message {
+  @extend .p-3, .mb-4;
+}
+
+.loading,
+.error {
+  @extend .text-center, .p-4;
+  font-size: 1.125rem;
+}

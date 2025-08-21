@@ -1,0 +1,57 @@
+@use '../styles/main.scss' as *;
+
+.view-translation {
+  @extend .container;
+}
+
+.translation-header {
+  @extend .flex, .justify-between, .items-center, .mb-4, .pb-3;
+}
+
+.translation-title {
+  h1 {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  p {
+    margin-bottom: 0.25rem;
+  }
+}
+
+.translation-languages {
+  font-weight: 500;
+}
+
+.translation-content {
+  @extend .grid, .grid-cols-2, .gap-4, .mb-4;
+}
+
+.lyrics-section {
+  @extend .p-3;
+  
+  h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+  }
+}
+
+.lyrics-text {
+  line-height: 1.8;
+  white-space: pre-line;
+  
+  p {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.translation-footer {
+  @extend .text-center, .pt-3;
+}
+
+.loading,
+.error {
+  @extend .text-center, .p-4;
+  font-size: 1.125rem;
+}

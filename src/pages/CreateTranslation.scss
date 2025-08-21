@@ -1,0 +1,72 @@
+@use '../styles/main.scss' as *;
+
+.create-translation {
+  @extend .container;
+}
+
+.create-header {
+  @extend .text-center, .mb-4;
+  
+  h1 {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  p {
+    font-size: 1rem;
+  }
+}
+
+.create-form {
+  @extend .p-4;
+}
+
+.form-layout {
+  @extend .grid, .grid-cols-2, .gap-4, .mb-4;
+}
+
+.form-info-section {
+  @extend .flex, .flex-col, .gap-4;
+}
+
+.form-lyrics-section {
+  @extend .flex, .flex-col;
+}
+
+.checkbox-group {
+  @extend .flex, .items-center, .gap-2, .mb-1;
+}
+
+.checkbox-label {
+  font-weight: 500;
+  cursor: pointer;
+  margin: 0;
+}
+
+.checkbox-description {
+  font-size: 0.875rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.language-select-container {
+  @extend .flex, .flex-col, .gap-2;
+}
+
+.search-input {
+  margin-bottom: 0;
+}
+
+.error-message {
+  @extend .p-3, .mb-4;
+}
+
+.form-actions {
+  @extend .flex, .gap-3, .justify-between, .mt-4, .pt-3;
+}
+
+.loading,
+.error {
+  @extend .text-center, .p-4;
+  font-size: 1.125rem;
+}
