@@ -60,8 +60,6 @@ const CreateTranslation: React.FC = () => {
         originalLyrics: originalLyrics.split('\n'),
         fillWithOriginal: fillWithOriginal,
       });
-      console.log('translation response:',translation);
-      
       navigate(`/translation/edit/${translation.id}`);
     } catch (err) {
       setError('Failed to create translation');

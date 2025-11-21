@@ -37,9 +37,6 @@ const EditTranslation: React.FC = () => {
 
   // Check if user can edit this translation after loading
   useEffect(() => {
-    console.log('user: ', user);
-    console.log('translation: ', translation);
-    
     if (!loading && translation && (!user || user.id !== translation.author.id)) {
       navigate('/404');
     }

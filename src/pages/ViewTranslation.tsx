@@ -47,7 +47,7 @@ const ViewTranslation: React.FC = () => {
         <div className="translation-title">
           <h1>{translation.artistName} - {translation.songName}</h1>
           <p className="translation-languages">
-            {translation.originalLanguage} → {translation.targetLanguage}
+            {translation.originalLanguage} → {translation.targetLanguage} by {translation.author.username}
           </p>
         </div>
         {canEdit && (

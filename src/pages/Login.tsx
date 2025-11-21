@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import './Login.scss';
@@ -9,8 +9,14 @@ const Login: React.FC = () => {
     password: '',
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const { login, isLoading, error } = useAuth();
+  const { user, login, isLoading, error } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user && user.id) {
+      navigate('/')
+    }
+  }, [user])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

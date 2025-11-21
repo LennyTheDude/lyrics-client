@@ -1,3 +1,5 @@
+import type { User } from "./auth";
+
 export interface Language {
   code: string;
   name: string;
@@ -11,11 +13,7 @@ export interface Translation {
   targetLanguage: string;
   originalLyrics: string[];
   translatedLyrics: string[];
-  author: {
-    id: string,
-    name: string,
-    email: string,
-  };
+  author: Pick<User, 'id' | 'username'>;
   createdAt: string;
   updatedAt: string;
 }

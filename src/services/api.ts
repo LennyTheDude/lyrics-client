@@ -66,8 +66,6 @@ export const translationAPI = {
     const response = await api.get<PaginatedResponse<Translation>>('/translations', {
       params: { page, limit }
     });
-    console.log('getTranslations response', response);
-    
     return response.data;
   },
 
