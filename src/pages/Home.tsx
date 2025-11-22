@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { translationAPI } from '../services/api';
 import type { Translation } from '../types/translation';
 import './Home.scss';
+import Flag from '../components/Flag';
 
 const Home: React.FC = () => {
   const [translations, setTranslations] = useState<Translation[]>([]);
@@ -77,7 +78,7 @@ const Home: React.FC = () => {
                   {translation.artistName} - {translation.songName}
                 </Link>
                 <span className="translation-languages">
-                  {translation.originalLanguage} → {translation.targetLanguage}
+                  <Flag code={translation.originalLanguage} /> → <Flag code={translation.targetLanguage} />
                 </span>
               </div>
               {user && user.id === translation.author.id && (

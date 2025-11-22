@@ -21,6 +21,9 @@
 
 .translation-languages {
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .edit-actions {
@@ -38,6 +41,7 @@
     font-size: 1.25rem;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
+    text-align: center;
   }
 }
 
@@ -48,6 +52,7 @@
   
   div {
     min-height: 30px;
+    padding: 0 8px;
   }
 }
 
@@ -59,8 +64,8 @@
   line-height: 1.8;
   div {
     min-height: 30px;
+    padding: 0 8px;
   }
-
 }
 
 .lyrics-line {

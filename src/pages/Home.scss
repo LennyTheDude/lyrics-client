@@ -28,6 +28,9 @@
 
 .translation-languages {
   font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .loading,

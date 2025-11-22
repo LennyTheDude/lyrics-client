@@ -6,13 +6,13 @@ import type { Translation } from '../types/translation';
 import './EditTranslation.scss';
 import { useLyrics } from '../hooks/useLyrics';
 import Lines from '../components/Lines';
+import Flag from '../components/Flag';
 
 const EditTranslation: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
   const [translation, setTranslation] = useState<Translation | null>(null);
-  const [translatedLyrics, setTranslatedLyrics] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -84,7 +84,7 @@ const EditTranslation: React.FC = () => {
           <h1>Edit Translation</h1>
           <p>{translation.artistName} - {translation.songName}</p>
           <p className="translation-languages">
-            {translation.originalLanguage} → {translation.targetLanguage}
+            <Flag code={translation.originalLanguage} /> → <Flag code={translation.targetLanguage} />
           </p>
         </div>
         <div className="edit-actions">

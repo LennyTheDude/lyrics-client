@@ -6,6 +6,7 @@ import type { Translation } from '../types/translation';
 import './ViewTranslation.scss';
 import { useLyrics } from '../hooks/useLyrics';
 import Lines from '../components/Lines';
+import Flag from '../components/Flag';
 
 const ViewTranslation: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -51,7 +52,7 @@ const ViewTranslation: React.FC = () => {
         <div className="translation-title">
           <h1>{translation.artistName} - {translation.songName}</h1>
           <p className="translation-languages">
-            {translation.originalLanguage} → {translation.targetLanguage} by {translation.author.username}
+            <Flag code={translation.originalLanguage} /> → <Flag code={translation.targetLanguage} /> by {translation.author.username}
           </p>
         </div>
         {canEdit && (
