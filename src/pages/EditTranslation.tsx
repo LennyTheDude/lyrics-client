@@ -4,6 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { translationAPI } from '../services/api';
 import type { Translation } from '../types/translation';
 import './EditTranslation.scss';
+import { useLyrics } from '../hooks/useLyrics';
+import Lines from '../components/Lines';
 
 const EditTranslation: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -14,6 +16,7 @@ const EditTranslation: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const hookData = useLyrics()
 
   useEffect(() => {
     const fetchTranslation = async () => {
@@ -23,7 +26,7 @@ const EditTranslation: React.FC = () => {
         setLoading(true);
         const data = await translationAPI.getTranslation(id);
         setTranslation(data);
-        setTranslatedLyrics(data.translatedLyrics);
+        hookData.setupLyrics(data.originalLyrics, data.translatedLyrics)
       } catch (err) {
         setError('Failed to load translation');
         console.error('Error fetching translation:', err);
@@ -47,7 +50,7 @@ const EditTranslation: React.FC = () => {
 
     try {
       setSaving(true);
-      await translationAPI.updateTranslation(id, { translatedLyrics });
+      await translationAPI.updateTranslation(id, { translatedLyrics: hookData.translation });
       navigate(`/translation/${id}`);
     } catch (err) {
       setError('Failed to save translation');
@@ -106,59 +109,30 @@ const EditTranslation: React.FC = () => {
         <div className="lyrics-section">
           <h2>Original Lyrics</h2>
           <div className="lyrics-text original">
-            {translation.originalLyrics.map((line, index) => (
-              <p key={index}>{line}</p>
-            ))}
+            <Lines
+              lines={hookData.original}
+              editable={false}
+              tag="original"
+              hoveredLine={hookData.hoveredLine}
+              setHoveredLine={hookData.setHoveredLine}
+              activeLine={hookData.activeLine}
+            />
           </div>
         </div>
 
         <div className="lyrics-section">
           <h2>Translated Lyrics</h2>
           <div className="lyrics-editable">
-            {translatedLyrics.map((line, index) => (
-              <div
-                key={index}
-                contentEditable
-                suppressContentEditableWarning
-                className="lyrics-line"
-                onBlur={(e) => {
-                  const newLyrics = [...translatedLyrics];
-                  newLyrics[index] = e.currentTarget.textContent || '';
-                  setTranslatedLyrics(newLyrics);
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    const newLyrics = [...translatedLyrics];
-                    newLyrics.splice(index + 1, 0, '');
-                    setTranslatedLyrics(newLyrics);
-                    // Focus the next line
-                    setTimeout(() => {
-                      const nextLine = e.currentTarget.nextElementSibling as HTMLElement;
-                      if (nextLine) {
-                        nextLine.focus();
-                      }
-                    }, 0);
-                  } else if (e.key === 'Backspace' && e.currentTarget.textContent === '') {
-                    e.preventDefault();
-                    if (translatedLyrics.length > 1) {
-                      const newLyrics = [...translatedLyrics];
-                      newLyrics.splice(index, 1);
-                      setTranslatedLyrics(newLyrics);
-                      // Focus the previous line
-                      setTimeout(() => {
-                        const prevLine = e.currentTarget.previousElementSibling as HTMLElement;
-                        if (prevLine) {
-                          prevLine.focus();
-                        }
-                      }, 0);
-                    }
-                  }
-                }}
-              >
-                {line}
-              </div>
-            ))}
+            <Lines
+              lines={hookData.translation}
+              editable={true}
+              tag="translation"
+              hoveredLine={hookData.hoveredLine}
+              setHoveredLine={hookData.setHoveredLine}
+              activeLine={hookData.activeLine}
+              setActiveLine={hookData.setActiveLine}
+              updateText={hookData.updateTranslation}
+            />
           </div>
         </div>
       </div>

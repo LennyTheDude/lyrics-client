@@ -40,9 +40,8 @@
 .lyrics-text {
   line-height: 1.8;
   white-space: pre-line;
-  
-  p {
-    margin-bottom: 0.5rem;
+  div {
+    min-height: 30px;
   }
 }
 

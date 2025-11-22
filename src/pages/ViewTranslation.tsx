@@ -4,6 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { translationAPI } from '../services/api';
 import type { Translation } from '../types/translation';
 import './ViewTranslation.scss';
+import { useLyrics } from '../hooks/useLyrics';
+import Lines from '../components/Lines';
 
 const ViewTranslation: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -11,6 +13,7 @@ const ViewTranslation: React.FC = () => {
   const [translation, setTranslation] = useState<Translation | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const hookData = useLyrics()
 
   useEffect(() => {
     const fetchTranslation = async () => {
@@ -20,6 +23,7 @@ const ViewTranslation: React.FC = () => {
         setLoading(true);
         const data = await translationAPI.getTranslation(id);
         setTranslation(data);
+        hookData.setupLyrics(data.originalLyrics, data.translatedLyrics)
       } catch (err) {
         setError('Failed to load translation');
         console.error('Error fetching translation:', err);
@@ -61,18 +65,26 @@ const ViewTranslation: React.FC = () => {
         <div className="lyrics-section">
           <h2>Original Lyrics</h2>
           <div className="lyrics-text">
-            {translation.originalLyrics.map((line: string, index: number) => (
-              <p key={index}>{line}</p>
-            ))}
+            <Lines
+              lines={hookData.original}
+              editable={false}
+              tag="original"
+              hoveredLine={hookData.hoveredLine}
+              setHoveredLine={hookData.setHoveredLine}
+            />
           </div>
         </div>
 
         <div className="lyrics-section">
           <h2>Translated Lyrics</h2>
           <div className="lyrics-text">
-            {translation.translatedLyrics.map((line: string, index: number) => (
-              <p key={index}>{line}</p>
-            ))}
+            <Lines
+              lines={hookData.translation}
+              editable={false}
+              tag="translation"
+              hoveredLine={hookData.hoveredLine}
+              setHoveredLine={hookData.setHoveredLine}
+            />
           </div>
         </div>
       </div>

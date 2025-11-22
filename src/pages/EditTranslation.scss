@@ -46,8 +46,8 @@
   white-space: pre-line;
   padding: 1rem;
   
-  p {
-    margin-bottom: 0.5rem;
+  div {
+    min-height: 30px;
   }
 }
 
@@ -56,8 +56,11 @@
   min-height: 400px;
   padding: 1rem;
   font-family: inherit;
-  font-size: 0.875rem;
-  line-height: 1.6;
+  line-height: 1.8;
+  div {
+    min-height: 30px;
+  }
+
 }
 
 .lyrics-line {
