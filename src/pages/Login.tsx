@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import './Login.scss';
+import { Link } from 'react-router-dom';
 
 const Login: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -125,14 +126,14 @@ const Login: React.FC = () => {
         </form>
 
         {/* link to signup - uncomment when need to activate signup */}
-        {/* <div className="auth-footer">
+        <div className="auth-footer">
           <p>
             Don't have an account?{' '}
             <Link to="/signup" className="auth-link">
               Sign up here
             </Link>
           </p>
-        </div> */}
+        </div>
       </div>
     </div>
   );

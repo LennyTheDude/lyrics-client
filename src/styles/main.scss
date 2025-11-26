@@ -26,6 +26,16 @@ p {
   margin-bottom: 1rem;
 }
 
+a {
+  text-decoration: none;
+  color: #0000ee;
+  transition: all .25s;
+  &:hover {
+    transition: all .25s;
+    color: #bb00ee;
+  }
+}
+
 // Buttons
 .btn {
   display: inline-block;

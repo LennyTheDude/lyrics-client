@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import './Signup.scss';
@@ -11,8 +11,15 @@ const Signup: React.FC = () => {
     confirmPassword: '',
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const { signup, isLoading, error } = useAuth();
+  const { user, signup, isLoading, error } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user && user.id) {
+      navigate('/')
+    }
+  }, [user])
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

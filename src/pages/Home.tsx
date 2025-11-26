@@ -22,7 +22,7 @@ const Home: React.FC = () => {
     const fetchTranslations = async () => {
       try {
         setLoading(true);
-        const data = await translationAPI.getTranslations();
+        const data = await translationAPI.getTranslations(1, 0);
         setTranslations(data.translations);
         setPagination({
           total: data.total,
@@ -78,7 +78,7 @@ const Home: React.FC = () => {
                   {translation.artistName} - {translation.songName}
                 </Link>
                 <span className="translation-languages">
-                  <Flag code={translation.originalLanguage} /> → <Flag code={translation.targetLanguage} />
+                  <Flag code={translation.originalLanguage} /> → <Flag code={translation.targetLanguage} /> by {translation.author.username}
                 </span>
               </div>
               {user && user.id === translation.author.id && (

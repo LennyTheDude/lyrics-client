@@ -27,24 +27,22 @@
 }
 
 .translation-content {
-  @extend .grid, .grid-cols-2, .gap-4, .mb-4;
+  @extend .grid, .grid-cols-2, .mb-4;
 }
 
-.lyrics-section {
-  @extend .p-3;
-  
+.lyrics-section {  
   h2 {
     font-size: 1.25rem;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
-    text-align: center;
+    padding-left: 80px;
   }
 }
 
 .lyrics-text {
   line-height: 1.8;
   white-space: pre-line;
-  div {
+  .line {
     min-height: 30px;
     padding: 0 8px;
   }

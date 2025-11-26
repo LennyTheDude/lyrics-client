@@ -26,7 +26,7 @@ const Lines: React.FC<ILinesProps> = ({ lines, editable, tag, hoveredLine, setHo
             key={`${tag}-line-${index}`}
             contentEditable={editable}
             suppressContentEditableWarning={true}
-            className={`${activeLine == index ? 'activeLine' : ''} ${hoveredLine == index ? 'hoveredLine' : ''} `}
+            className={`line${activeLine == index ? ' activeLine' : ''}${hoveredLine == index ? ' hoveredLine' : ''}`}
             onFocus={setActiveLine && (() => setActiveLine(index))}
             onMouseEnter={() => setHoveredLine(index)}
             onMouseLeave={() => setHoveredLine(null)}
