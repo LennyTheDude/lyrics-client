@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from "react"
+import { useState } from "react"
 
 export const useLyrics = () => {
   const [original, setOriginal] = useState<string[]>([])
@@ -7,16 +7,16 @@ export const useLyrics = () => {
   const [activeLine, setActiveLine] = useState<number | null>(null)
   const [hoveredLine, setHoveredLine] = useState<number | null>(null)
   
-  const updateOriginal = (event: ChangeEvent, index: number) => {
-    const newOriginal = original;
-    newOriginal[index] = event.target.innerHTML;
-    setOriginal(newOriginal);
+  const updateOriginal = (index: number, plainText: string) => {
+    const next = [...original]
+    next[index] = plainText
+    setOriginal(next)
   }
 
-  const updateTranslation = (event: ChangeEvent, index: number) => {
-    const newTranslation = translation;
-    newTranslation[index] = event.target.innerHTML;
-    setTranslation(newTranslation);
+  const updateTranslation = (index: number, plainText: string) => {
+    const next = [...translation]
+    next[index] = plainText
+    setTranslation(next)
   }
 
   const setupLyrics = (original: string[], translation: string[]) => {
