@@ -1,0 +1,29 @@
+.confirm-leave-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.confirm-leave-modal {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  max-width: 400px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.confirm-leave-modal-message {
+  margin-bottom: 1.25rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.confirm-leave-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}

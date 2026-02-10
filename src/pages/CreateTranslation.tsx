@@ -4,6 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { translationAPI } from '../services/api';
 import type { Language } from '../types/translation';
 import './CreateTranslation.scss';
+import { useUnsavedChangesGuard } from '../hooks/useUnsavedChangesGuard';
+import ConfirmLeaveModal from '../components/ConfirmLeaveModal';
 
 const CreateTranslation: React.FC = () => {
   const navigate = useNavigate();
@@ -12,7 +14,7 @@ const CreateTranslation: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Form state
   const [artistName, setArtistName] = useState('');
   const [songName, setSongName] = useState('');
@@ -20,6 +22,12 @@ const CreateTranslation: React.FC = () => {
   const [targetLanguage, setTargetLanguage] = useState('');
   const [originalLyrics, setOriginalLyrics] = useState('');
   const [fillWithOriginal, setFillWithOriginal] = useState(false);
+
+  const hasUnsavedChanges =
+    [artistName, songName, originalLyrics].some((s) => s.trim() !== '') ||
+    originalLanguage !== '' ||
+    targetLanguage !== '';
+  const guard = useUnsavedChangesGuard(hasUnsavedChanges);
 
   useEffect(() => {
     const fetchLanguages = async () => {
@@ -188,9 +196,15 @@ const CreateTranslation: React.FC = () => {
 
         {error && <div className="error-message">{error}</div>}
 
+        <ConfirmLeaveModal
+          open={guard.showModal}
+          onConfirm={guard.confirmNavigation}
+          onCancel={guard.cancelNavigation}
+        />
+
         <div className="form-actions">
           <button
-            onClick={() => navigate('/')}
+            onClick={() => guard.tryLeave(() => navigate('/'))}
             className="btn btn-secondary"
             disabled={creating}
           >

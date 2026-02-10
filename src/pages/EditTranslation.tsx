@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { translationAPI } from '../services/api';
 import type { Translation } from '../types/translation';
-import './EditTranslation.scss';
+import { arraysEqual } from '../utils/arrays';
 import { useLyrics } from '../hooks/useLyrics';
+import { useUnsavedChangesGuard } from '../hooks/useUnsavedChangesGuard';
 import Lines from '../components/Lines';
 import Flag from '../components/Flag';
+import ConfirmLeaveModal from '../components/ConfirmLeaveModal';
+import './EditTranslation.scss';
 
 const EditTranslation: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -16,17 +19,23 @@ const EditTranslation: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const hookData = useLyrics()
+  const hookData = useLyrics();
+  const initialRef = useRef<string[] | null>(null);
+
+  const hasUnsavedChanges =
+    initialRef.current !== null && !arraysEqual(initialRef.current, hookData.translation);
+  const guard = useUnsavedChangesGuard(hasUnsavedChanges);
 
   useEffect(() => {
     const fetchTranslation = async () => {
       if (!id) return;
-      
+
       try {
         setLoading(true);
         const data = await translationAPI.getTranslation(id);
         setTranslation(data);
-        hookData.setupLyrics(data.originalLyrics, data.translatedLyrics)
+        hookData.setupLyrics(data.originalLyrics, data.translatedLyrics);
+        initialRef.current = data.translatedLyrics;
       } catch (err) {
         setError('Failed to load translation');
         console.error('Error fetching translation:', err);
@@ -60,9 +69,7 @@ const EditTranslation: React.FC = () => {
     }
   };
 
-  const handleCancel = () => {
-    navigate(-1);
-  };
+  const handleCancel = () => guard.tryLeave(() => navigate(-1));
 
   if (loading) {
     return <div className="loading">Loading translation...</div>;
@@ -79,6 +86,11 @@ const EditTranslation: React.FC = () => {
 
   return (
     <div className="edit-translation">
+      <ConfirmLeaveModal
+        open={guard.showModal}
+        onConfirm={guard.confirmNavigation}
+        onCancel={guard.cancelNavigation}
+      />
       <div className="edit-header">
         <div className="translation-title">
           <h1>Edit Translation</h1>
