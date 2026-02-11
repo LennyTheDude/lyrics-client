@@ -2,10 +2,16 @@
 
 .edit-translation {
   @extend .container;
+  @media (max-width: 740px) {
+    padding: 0;
+  }
 }
 
 .edit-header {
-  @extend .flex, .justify-between, .items-center, .mb-4, .pb-3;
+  @extend .flex, .justify-between, .items-center;
+  @media (max-width: 740px) {
+    padding: 20px 20px;
+  }
 }
 
 .translation-title {
@@ -31,15 +37,21 @@
 }
 
 .translation-content {
-  @extend .grid, .grid-cols-2, .mb-4;
+  @extend .flex, .justify-between, .gap-1;
+  width: 100%;
 }
 
-.lyrics-section {  
+.lyrics-section {
+  width: 100%;
   h2 {
     font-size: 1.25rem;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
     padding-left: 80px;
+
+    @media (max-width: 740px) {
+      padding-left: 8px !important;
+    }
   }
 }
 
@@ -52,6 +64,10 @@
     min-height: 30px;
     padding: 0 8px;
   }
+
+  @media (max-width: 740px) {
+    padding: 0;
+  }
 }
 
 .lyrics-editable {
@@ -63,6 +79,14 @@
   div {
     min-height: 30px;
     padding: 0 8px;
+  }
+
+      
+  @media (max-width: 740px) {
+    padding: 0;
+    .text-wrapper {
+      padding: 0;
+    }
   }
 }
 

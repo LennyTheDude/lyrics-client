@@ -4,4 +4,8 @@
 
 .main-content {
   padding: 1rem;
+
+  @media (max-width: 740px) {
+    padding: 0;
+  }
 }

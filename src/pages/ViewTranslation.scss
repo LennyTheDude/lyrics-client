@@ -2,10 +2,16 @@
 
 .view-translation {
   @extend .container;
+  @media (max-width: 740px) {
+    padding: 0;
+  }
 }
 
 .translation-header {
-  @extend .flex, .justify-between, .items-center, .mb-4, .pb-3;
+  @extend .flex, .justify-between, .items-center;
+  @media (max-width: 740px) {
+    padding: 20px 20px;
+  }
 }
 
 .translation-title {
@@ -36,6 +42,10 @@
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
     padding-left: 80px;
+
+    @media (max-width: 740px) {
+      padding-left: 8px !important;
+    }
   }
 }
 
