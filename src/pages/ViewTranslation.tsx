@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { translationAPI } from '../services/api';
@@ -15,6 +15,35 @@ const ViewTranslation: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const hookData = useLyrics()
+  const originalWrapperRef = useRef<HTMLDivElement | null>(null);
+  const translationWrapperRef = useRef<HTMLDivElement | null>(null);
+
+  const syncLineHeights = () => {
+    const originalContainer = originalWrapperRef.current;
+    const translationContainer = translationWrapperRef.current;
+
+    if (!originalContainer || !translationContainer) return;
+
+    const originalLines = originalContainer.querySelectorAll(".line");
+    const translationLines = translationContainer.querySelectorAll(".line");
+
+    const maxLines = Math.max(originalLines.length, translationLines.length);
+
+    for (let i = 0; i < maxLines; i++) {
+      const orig = originalLines[i] as HTMLElement | undefined;
+      const trans = translationLines[i] as HTMLElement | undefined;
+
+      if (!orig || !trans) continue;
+
+      orig.style.height = "auto";
+      trans.style.height = "auto";
+
+      const maxHeight = Math.max(orig.offsetHeight, trans.offsetHeight);
+
+      orig.style.height = maxHeight + "px";
+      trans.style.height = maxHeight + "px";
+    }
+  };
 
   useEffect(() => {
     const fetchTranslation = async () => {
@@ -35,6 +64,36 @@ const ViewTranslation: React.FC = () => {
 
     fetchTranslation();
   }, [id]);
+
+  useLayoutEffect(() => {
+    syncLineHeights();
+  }, [hookData.original, hookData.translation]);
+
+  useEffect(() => {
+    const originalContainer = originalWrapperRef.current;
+    const translationContainer = translationWrapperRef.current;
+
+    if (!originalContainer || !translationContainer) return;
+
+    const observer = new ResizeObserver(() => {
+      syncLineHeights();
+    });
+
+    observer.observe(originalContainer);
+    observer.observe(translationContainer);
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      syncLineHeights();
+    };
+  
+    window.addEventListener("resize", handleResize);
+  
+    return () => window.removeEventListener("resize", handleResize);  
+  }, [])
 
   if (loading) {
     return <div className="loading">Loading translation...</div>;
@@ -65,7 +124,7 @@ const ViewTranslation: React.FC = () => {
       <div className="translation-content">
         <div className="lyrics-section">
           <h2>Original Lyrics</h2>
-          <div className="lyrics-text">
+          <div className="lyrics-text" ref={originalWrapperRef}>
             <Lines
               lines={hookData.original}
               editable={false}
@@ -78,7 +137,7 @@ const ViewTranslation: React.FC = () => {
 
         <div className="lyrics-section">
           <h2>Translated Lyrics</h2>
-          <div className="lyrics-text">
+          <div className="lyrics-text" ref={translationWrapperRef}>
             <Lines
               lines={hookData.translation}
               editable={false}

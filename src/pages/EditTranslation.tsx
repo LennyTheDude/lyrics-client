@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { translationAPI } from '../services/api';
@@ -21,6 +21,37 @@ const EditTranslation: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const hookData = useLyrics();
   const initialRef = useRef<string[] | null>(null);
+  const originalWrapperRef = useRef<HTMLDivElement | null>(null);
+  const translationWrapperRef = useRef<HTMLDivElement | null>(null);
+  const originalRefs = useRef<HTMLElement[]>([]);
+  const translationRefs = useRef<HTMLElement[]>([]);
+
+  const syncLineHeights = () => {
+    const originalContainer = originalWrapperRef.current;
+    const translationContainer = translationWrapperRef.current;
+
+    if (!originalContainer || !translationContainer) return;
+
+    const originalLines = originalContainer.querySelectorAll(".line");
+    const translationLines = translationContainer.querySelectorAll(".line");
+
+    const maxLines = Math.max(originalLines.length, translationLines.length);
+
+    for (let i = 0; i < maxLines; i++) {
+      const orig = originalLines[i] as HTMLElement | undefined;
+      const trans = translationLines[i] as HTMLElement | undefined;
+
+      if (!orig || !trans) continue;
+
+      orig.style.height = "auto";
+      trans.style.height = "auto";
+
+      const maxHeight = Math.max(orig.offsetHeight, trans.offsetHeight);
+
+      orig.style.height = `${maxHeight}px`;
+      trans.style.height = `${maxHeight}px`;
+    }
+  };
 
   const hasUnsavedChanges =
     initialRef.current !== null && !arraysEqual(initialRef.current, hookData.translation);
@@ -46,6 +77,47 @@ const EditTranslation: React.FC = () => {
 
     fetchTranslation();
   }, [id]);
+
+  useLayoutEffect(() => {
+    syncLineHeights();
+  }, [hookData.original, hookData.translation]);
+
+  useEffect(() => {
+    const originalContainer = originalWrapperRef.current;
+    const translationContainer = translationWrapperRef.current;
+
+    if (!originalContainer || !translationContainer) return;
+
+    originalRefs.current = Array.from(
+      originalContainer.querySelectorAll(".line")
+    ) as HTMLElement[];
+    translationRefs.current = Array.from(
+      translationContainer.querySelectorAll(".line")
+    ) as HTMLElement[];
+
+    const observer = new ResizeObserver(() => {
+      syncLineHeights();
+    });
+    document.addEventListener('resize', () => syncLineHeights)
+
+    originalRefs.current.forEach((el) => el && observer.observe(el));
+    translationRefs.current.forEach((el) => el && observer.observe(el));
+
+    return () => {
+      observer.disconnect()
+      document.removeEventListener('resize', syncLineHeights)
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      syncLineHeights();
+    };
+  
+    window.addEventListener("resize", handleResize);
+  
+    return () => window.removeEventListener("resize", handleResize);  
+  }, [])
 
   // Check if user can edit this translation after loading
   useEffect(() => {
@@ -120,7 +192,7 @@ const EditTranslation: React.FC = () => {
       <div className="translation-content">
         <div className="lyrics-section">
           <h2>Original Lyrics</h2>
-          <div className="lyrics-text original">
+          <div className="lyrics-text original" ref={originalWrapperRef}>
             <Lines
               lines={hookData.original}
               editable={false}
@@ -134,7 +206,7 @@ const EditTranslation: React.FC = () => {
 
         <div className="lyrics-section">
           <h2>Translated Lyrics</h2>
-          <div className="lyrics-editable">
+          <div className="lyrics-editable" ref={translationWrapperRef}>
             <Lines
               lines={hookData.translation}
               editable={true}
