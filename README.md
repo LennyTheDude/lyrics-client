@@ -1,69 +1,104 @@
-# React + TypeScript + Vite
+# Lyrics Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend application for the Lyrics app, built with React, TypeScript, Vite, and React Router.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Authentication flow (signup, login, logout, session restoration)
+- Browse translations with pagination
+- View a single translation
+- Protected create/edit/delete translation actions
+- Language list integration from backend API
+- Route-level 404 handling and guarded routes
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React 19
+- TypeScript
+- Vite
+- React Router
+- Axios
+- Sass
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Prerequisites
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- Node.js 18+ (Node.js 20+ recommended)
+- npm
+- Running backend API (`lyrics-server`)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Environment Variables
+
+Create a `.env` file in `lyrics-client/`:
+
+```bash
+VITE_API_URL=http://localhost:7777/api
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+If not provided, the app defaults to `http://localhost:7777/api`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Getting Started
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+From `lyrics-client/`:
+
+```bash
+npm install
+npm run dev
 ```
+
+Vite will print a local URL (usually `http://localhost:5173`).
+
+## Available Scripts
+
+- `npm run dev` - start local development server
+- `npm run build` - type-check and build production assets
+- `npm run preview` - preview the production build locally
+- `npm run lint` - run ESLint
+
+## Project Structure
+
+Key folders in `src/`:
+
+- `pages/` - route-level screens (home, login, signup, translation pages)
+- `components/` - reusable UI components (navbar, route guards, shared UI)
+- `services/` - API client and request helpers
+- `contexts/` - auth state and provider logic
+- `hooks/` - reusable hooks
+- `types/` - shared TypeScript types
+- `styles/` - shared styling assets
+
+## Routing Overview
+
+Public routes:
+
+- `/`
+- `/login`
+- `/signup`
+- `/translation/:id`
+
+Protected routes:
+
+- `/translation/new`
+- `/translation/edit/:id`
+
+Fallback:
+
+- `*` -> 404 page
+
+## API Integration
+
+The frontend communicates with the backend via Axios using `VITE_API_URL`. It:
+
+- sends JWT access token from `localStorage` in `Authorization` header
+- clears auth state and redirects to `/login` on `401` responses
+
+## Build and Deployment Notes
+
+- Run `npm run build` before deployment.
+- Serve the generated `dist/` directory using a static host (Netlify, Vercel, Nginx, etc.).
+- Ensure `VITE_API_URL` points to your deployed API base URL.
+
+## Troubleshooting
+
+- If requests fail with CORS errors, verify backend `ALLOWED_ORIGINS` and runtime `NODE_ENV`.
+- If auth appears broken, clear `localStorage` and re-login.
+- If the app cannot reach the API, confirm `VITE_API_URL` and backend server port.
